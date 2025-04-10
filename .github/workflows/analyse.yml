@@ -46,7 +46,7 @@ jobs:
         if: ${{ env.sonar_enabled == 'true'}}
         run: |
             if [[ "${{ inputs.sonar_project_key }}" == "" ]]; then
-                 echo "sonar_key=${{ github.repository.replace('/', '_') }}" >> $GITHUB_ENV
+                 echo "sonar_key=${GITHUB_REPOSITORY//\//_}" >> $GITHUB_ENV
             else
                 echo "sonar_key=${{ inputs.sonar_project_key }}" >> $GITHUB_ENV
             fi

@@ -12,7 +12,7 @@ on:
         description: 'The Dash project ID'
         required: false
         type: string
-        default: ${{ github.repository.replace('/', '_') }}
+        default: ''
       dash_repo:
         description: 'The Dash repository URL'
         required: false
@@ -44,13 +44,25 @@ jobs:
           distribution: 'zulu'
           cache: maven
 
-      - name: check if token required
-        id: check-token
+      - name: validate inputs
+        id: validate-inputs
         if: ${{ inputs.create-review }}
         run: |
           if [ "${{ inputs.create-review }}" = "true" ] && [ -z "${{ secrets.token }}" ]; then
             echo "Token is required for creating a review but not provided."
             exit 1
+          fi
+          if [ "${{ inputs.create-review }}" = "true" ] && [ -z "${{ inputs.dash_project_id }}" ]; then
+            echo "dash_project_id=${GITHUB_REPOSITORY//\//_}" >> $GITHUB_ENV
+          fi
+          else
+            echo "dash_project_id=${{ inputs.dash_project_id }}" >> $GITHUB_ENV
+          fi
+          if [ "${{ inputs.create-review }}" = "true" ] && [ -z "${{ inputs.dash_repo }}" ]; then
+            echo "dash_repo=http://github.com/${GITHUB_REPOSITORY}" >> $GITHUB_ENV
+          fi
+          else
+            echo "dash_repo=${{ inputs.dash_repo }}" >> $GITHUB_ENV
           fi
 
       - name: Build with Maven and check dependencies with dash
