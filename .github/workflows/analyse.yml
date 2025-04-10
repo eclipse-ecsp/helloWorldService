@@ -12,12 +12,12 @@ on:
         description: 'The SonarCloud project key'
         required: true
         type: string
-        default: ${{ github.repository.replace('/', '_') }}
+        default: ''
       sonar_organization:
         description: 'The SonarCloud organization'
         required: false
         type: string
-        default: ${{ github.repository_owner }}
+        default: ''
     secrets:
       token:
         required: true
@@ -29,17 +29,36 @@ jobs:
       - name: Check if Sonar is enabled
         id: sonar-check
         run: |
-          if [[ "${{ secrets.SONAR_TOKEN }}" == "" ]]; then
+          if [[ "${{ secrets.token }}" == "" ]]; then
             echo "SONAR_TOKEN is not set. Skipping Sonar analysis."
             echo "sonar_enabled=false" >> $GITHUB_ENV
           else
             echo "SONAR_TOKEN is set. Sonar analysis will be performed."
             echo "sonar_enabled=true" >> $GITHUB_ENV
           fi
+
       - name: Checkout code
         if: ${{ env.sonar_enabled == 'true' }}
         uses: actions/checkout@v4
 
+      - name: Compute Sonar Key
+        id: compute-sonar-key
+        if: ${{ env.sonar_enabled == 'true'}}
+        run: |
+            if [[ "${{ inputs.sonar_project_key }}" == "" ]]; then
+                 echo "sonar_key=${{ github.repository.replace('/', '_') }}" >> $GITHUB_ENV
+            else
+                echo "sonar_key=${{ inputs.sonar_project_key }}" >> $GITHUB_ENV
+            fi
+      - name: Compute Sonar Organization
+        id: compute-sonar-org
+        if: ${{ env.sonar_enabled == 'true'}}
+        run: |
+          if [[ "${{ inputs.sonar_organization }}" == "" ]]; then
+               echo "sonar_organization=${{ github.repository_owner }}" >> $GITHUB_ENV
+          else
+              echo "sonar_organization=${{ inputs.sonar_organization }}" >> $GITHUB_ENV
+          fi
       - name: Set up JDK
         if: ${{ env.sonar_enabled == 'true' }}
         uses: actions/setup-java@v4
@@ -65,4 +84,4 @@ jobs:
           mvn clean verify sonar:sonar \
             -Dsonar.projectKey=${{ inputs.sonar_project_key }} \
             -Dsonar.organization=${{ inputs.sonar_organization }} \
-            -Dsonar.login=${{ secrets.token }}
+            -Dsonar.login=${{ env.SONAR_TOKEN }}
