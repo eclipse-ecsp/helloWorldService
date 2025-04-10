@@ -1,0 +1,39 @@
+name: Run Maven
+
+on:
+  workflow_call:
+    inputs:
+      java_version:
+        description: 'The Java version to use'
+        required: true
+        type: string
+      maven_args:
+        description: 'The Maven goals to execute'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ inputs.java_version }}
+          distribution: zulu
+          cache: maven
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ runner.os }}-
+
+      - name: Build with Maven
+        run: mvn ${{ inputs.maven_args }}
