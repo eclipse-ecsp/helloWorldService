@@ -7,14 +7,14 @@ on:
 
 jobs:
   build:
-    uses: ./.github/reusable-workflows/maven/maven-run.yml
+    uses: ./.github/reusable-workflows/maven/maven-run.yml@main
     with:
       java_version: '17'
       maven_args: 'clean package --file pom.xml'
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
   sonar-analysis:
-    uses: ./.github/reusable-workflows/sonar/analyse.yml
+    uses: ./.github/reusable-workflows/sonar/analyse.yml@main
     with:
       java_version: '17'
       sonar_project_key: 'eclipse-ecsp_helloWorldService'
