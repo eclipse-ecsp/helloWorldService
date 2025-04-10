@@ -19,7 +19,4 @@ jobs:
     uses: ./.github/workflows/licences-analysis-maven.yml
     name: Analyse Licences
     with:
-      java_version: '17'
-      dash_project_id: 'eclipse-ecsp_helloWorldService'
-      dash_repo: https://github.com/${{ github.repository }}
       create-review: false

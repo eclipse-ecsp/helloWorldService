@@ -48,30 +48,30 @@ jobs:
         id: validate-inputs
         if: ${{ inputs.create-review }}
         run: |
-          if [ "${{ inputs.create-review }}" = "true" ] && [ -z "${{ secrets.token }}" ]; then
-            echo "Token is required for creating a review but not provided."
-            exit 1
-          fi
-          if [ "${{ inputs.create-review }}" = "true" ] && [ -z "${{ inputs.dash_project_id }}" ]; then
-            echo "dash_project_id=${GITHUB_REPOSITORY//\//_}" >> $GITHUB_ENV
-          fi
-          else
-            echo "dash_project_id=${{ inputs.dash_project_id }}" >> $GITHUB_ENV
-          fi
-          if [ "${{ inputs.create-review }}" = "true" ] && [ -z "${{ inputs.dash_repo }}" ]; then
-            echo "dash_repo=http://github.com/${GITHUB_REPOSITORY}" >> $GITHUB_ENV
-          fi
-          else
-            echo "dash_repo=${{ inputs.dash_repo }}" >> $GITHUB_ENV
+          if [ "${{ inputs.create-review }}" = "true" ]; then
+            if [ -z "${{ secrets.token }}" ]; then
+              echo "Token is required for creating a review but not provided."
+              exit 1
+            fi
+            if [ -z "${{ inputs.dash_project_id }}" ]; then
+              echo "dash_project_id=${GITHUB_REPOSITORY//\//_}" >> $GITHUB_ENV
+            else
+              echo "dash_project_id=${{ inputs.dash_project_id }}" >> $GITHUB_ENV
+            fi
+            if [ -z "${{ inputs.dash_repo }}" ]; then
+              echo "dash_repo=http://github.com/${GITHUB_REPOSITORY}" >> $GITHUB_ENV
+            else
+              echo "dash_repo=${{ inputs.dash_repo }}" >> $GITHUB_ENV
+            fi
           fi
 
       - name: Build with Maven and check dependencies with dash
         run: |
-            if [ -n "${{ inputs.create-review }}" ]; then
+           if [ "${{ inputs.create-review }}" = "true" ]; then
               mvn --batch-mode --update-snapshots verify -Ddash.projectId=${{ inputs.dash_project_id }} -Ddash.repo=${{ inputs.dash_repo }} -Ddash.iplab.token=${{ secrets.token }} -P dash
-            else
+           else
               mvn --batch-mode --update-snapshots verify -P dash
-            fi
+           fi
 
       - name: Ensure DEPENDENCIES file is reflecting the current state
         run: |
