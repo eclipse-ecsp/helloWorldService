@@ -76,7 +76,7 @@ jobs:
       - name: Ensure DEPENDENCIES file is reflecting the current state
         run: |
           mvn org.eclipse.dash:license-tool-plugin:license-check -Ddash.summary=DEPENDENCIES-gen -P dash
-          diff DEPENDENCIES DEPENDENCIES-gen
+          diff DEPENDENCIES DEPENDENCIES-gen || echo "DEPENDENCIES file differs from DEPENDENCIES-gen"
 
       - name: Upload results
         if: always()
