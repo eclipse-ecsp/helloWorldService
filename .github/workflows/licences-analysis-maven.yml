@@ -67,7 +67,7 @@ jobs:
 
       - name: Build with Maven and check dependencies with dash
         run: |
-            if [ -n "${{ input.create-review }}" ]; then
+            if [ -n "${{ inputs.create-review }}" ]; then
               mvn --batch-mode --update-snapshots verify -Ddash.projectId=${{ inputs.dash_project_id }} -Ddash.repo=${{ inputs.dash_repo }} -Ddash.iplab.token=${{ secrets.token }} -P dash
             else
               mvn --batch-mode --update-snapshots verify -P dash
