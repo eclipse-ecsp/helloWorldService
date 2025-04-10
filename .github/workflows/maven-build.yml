@@ -1,4 +1,4 @@
-name: Use SonarCloud Analysis Workflow
+name: Maven Build & Sonar Analysis
 
 on:
   push:
@@ -12,16 +12,11 @@ jobs:
     uses: ./.github/workflows/maven-run.yml
     name: Maven Build
     with:
-      java_version: '17'
       maven_args: 'clean package --file pom.xml'
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
   sonar_analysis:
     needs: maven_build
     uses: ./.github/workflows/analyse.yml
-    with:
-      java_version: '17'
-      sonar_project_key: 'eclipse-ecsp_helloWorldService'
-      sonar_organization: 'eclipse-ecsp'
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.SONAR_TOKEN }}

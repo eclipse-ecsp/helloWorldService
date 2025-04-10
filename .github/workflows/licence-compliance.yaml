@@ -1,0 +1,25 @@
+name: License Compliance
+
+on:
+  push:
+    branches: [ "*" ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+  pull_request:
+    branches: [ "*" ]
+  workflow_dispatch:
+
+permissions:
+  pull-requests: read
+  contents: write
+
+jobs:
+  check_licences:
+    uses: ./.github/workflows/licences-analysis-maven.yml
+    name: Analyse Licences
+    with:
+      java_version: '17'
+      dash_project_id: 'eclipse-ecsp_helloWorldService'
+      dash_repo: https://github.com/${{ github.repository }}
+      create-review: false

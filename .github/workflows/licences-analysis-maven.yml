@@ -1,0 +1,65 @@
+name: License Analysis with maven and dash
+
+on:
+  workflow_call:
+    inputs:
+      java_version:
+        description: 'The Java version to use'
+        required: false
+        type: string
+        default: '17'
+      dash_project_id:
+        description: 'The Dash project ID'
+        required: false
+        type: string
+        default: ${{ github.repository.replace('/', '_') }}
+      dash_repo:
+        description: 'The Dash repository URL'
+        required: false
+        type: string
+        default: https://github.com/${{ github.repository }}
+      create-review:
+        description: 'Create a review for the license analysis'
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      token:
+        required: false
+
+permissions:
+  pull-requests: read
+  contents: write
+
+jobs:
+  check-licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ inputs.java_version }}
+          distribution: 'zulu'
+          cache: maven
+
+      - name: Build with Maven and check dependencies with dash
+        run: |
+            if [ -n "${{ secrets.token }}" ]; then
+              mvn --batch-mode --update-snapshots verify -Ddash.projectId=${{ inputs.dash_project_id }} -Ddash.repo=${{ inputs.dash_repo }} -Ddash.iplab.token=${{ secrets.token }} -P dash
+            else
+              mvn --batch-mode --update-snapshots verify -P dash
+            fi
+
+      - name: Ensure DEPENDENCIES file is reflecting the current state
+        run: |
+          mvn org.eclipse.dash:license-tool-plugin:license-check -Ddash.summary=DEPENDENCIES-gen -P dash
+          diff DEPENDENCIES DEPENDENCIES-gen
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          path: 'target/dash/summary'
+          name: 'license-analysis-summary'
