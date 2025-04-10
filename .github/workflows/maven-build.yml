@@ -8,14 +8,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  maven_build:
     uses: ./.github/workflows/maven-run.yml
+    name: Maven Build
     with:
       java_version: '17'
       maven_args: 'clean package --file pom.xml'
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
-  sonar-analysis:
+  sonar_analysis:
+    needs: maven_build
     uses: ./.github/workflows/analyse.yml
     with:
       java_version: '17'

@@ -11,7 +11,9 @@ on:
         description: 'The Maven goals to execute'
         required: true
         type: string
-
+    secrets:
+      token:
+        required: true
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,6 +21,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        env:
+          GITHUB_TOKEN: ${{ secrets.token }}
 
       - name: Set up JDK
         uses: actions/setup-java@v4
