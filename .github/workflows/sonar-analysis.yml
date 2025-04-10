@@ -31,19 +31,17 @@ jobs:
         run: |
           if [[ "${{ secrets.token }}" == "" ]]; then
             echo "SONAR_TOKEN is not set. Skipping Sonar analysis."
-            echo "sonar_enabled=false" >> $GITHUB_ENV
+            exit 0
           else
             echo "SONAR_TOKEN is set. Sonar analysis will be performed."
             echo "sonar_enabled=true" >> $GITHUB_ENV
           fi
 
       - name: Checkout code
-        if: ${{ env.sonar_enabled == 'true' }}
         uses: actions/checkout@v4
 
       - name: Compute Sonar Key
         id: compute-sonar-key
-        if: ${{ env.sonar_enabled == 'true'}}
         run: |
             if [[ "${{ inputs.sonar_project_key }}" == "" ]]; then
                  echo "sonar_key=${GITHUB_REPOSITORY//\//_}" >> $GITHUB_ENV
@@ -52,7 +50,6 @@ jobs:
             fi
       - name: Compute Sonar Organization
         id: compute-sonar-org
-        if: ${{ env.sonar_enabled == 'true'}}
         run: |
           if [[ "${{ inputs.sonar_organization }}" == "" ]]; then
                echo "sonar_organization=${{ github.repository_owner }}" >> $GITHUB_ENV
@@ -60,7 +57,6 @@ jobs:
               echo "sonar_organization=${{ inputs.sonar_organization }}" >> $GITHUB_ENV
           fi
       - name: Set up JDK
-        if: ${{ env.sonar_enabled == 'true' }}
         uses: actions/setup-java@v4
         with:
           java-version: ${{ inputs.java_version }}
@@ -68,7 +64,6 @@ jobs:
           cache: maven
 
       - name: Cache Maven dependencies
-        if: ${{ env.sonar_enabled == 'true' }}
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
@@ -77,7 +72,6 @@ jobs:
             maven-${{ runner.os }}-
 
       - name: Run SonarCloud Analysis
-        if: ${{ env.sonar_enabled == 'true' }}
         env:
           SONAR_TOKEN: ${{ secrets.token }}
         run: |

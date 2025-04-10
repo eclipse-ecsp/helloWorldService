@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   check_licences:
-    uses: ./.github/workflows/licences-analysis-maven.yml
+    uses: ./.github/workflows/licences-analysis.yml
     name: Analyse Licences
     with:
       create-review: false
