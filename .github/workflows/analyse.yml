@@ -5,16 +5,19 @@ on:
     inputs:
       java_version:
         description: 'The Java version to use'
-        required: true
+        required: false
         type: string
+        default: '17'
       sonar_project_key:
         description: 'The SonarCloud project key'
         required: true
         type: string
+        default: ${{ github.repository.replace('/', '_') }}
       sonar_organization:
         description: 'The SonarCloud organization'
-        required: true
+        required: false
         type: string
+        default: ${{ github.repository_owner }}
     secrets:
       token:
         required: true
