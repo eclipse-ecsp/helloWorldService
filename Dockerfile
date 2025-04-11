@@ -8,7 +8,6 @@ ARG PROJECT_JAR_NAME
 ENV PROJECT_JAR_NAME ${PROJECT_JAR_NAME}
 
 ADD ./target/${PROJECT_JAR_NAME}.jar /opt/app/app.jar
-ADD ./src/main/resources/logback.xml /opt/app/logback.xml
 
 EXPOSE 7000 8080
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
