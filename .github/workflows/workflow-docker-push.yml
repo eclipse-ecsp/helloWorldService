@@ -108,7 +108,7 @@ jobs:
         id: prepare-full-image-tag
         run: |
           if [ "${{ inputs.registry }}" = "docker.io" ]; then
-              echo "full_image_tag=${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
+              echo "full_image_tag=${{ secrets.DOCKER_USERNAME }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
           else
               echo "full_image_tag=${{ inputs.registry }}/${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
           fi
