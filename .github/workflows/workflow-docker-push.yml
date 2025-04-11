@@ -68,7 +68,7 @@ jobs:
                 echo "image_name=${{ steps.extract-info.outputs.artifact-id }}" >> $GITHUB_ENV
             else
                 echo "image_name=${{ inputs.image_name }}" >> $GITHUB_ENV
-            fid
+            fi
             
             if [ "${{ inputs.image_tag }}" = "" ]; then
                 echo "image_tag=${{ steps.extract-info.outputs.version }}" >> $GITHUB_ENV
