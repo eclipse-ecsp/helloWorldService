@@ -54,7 +54,7 @@ jobs:
         run: |
           mvn ${{ inputs.maven_args }}
 
-      - name: Extract api service pom details
+      - name: Extract pom details
         id: extract-info
         if: ${{ inputs.image_name == '' || inputs.image_tag == '' }}
         uses: andreacomo/maven-gav-extractor@v2.0.1
@@ -68,9 +68,7 @@ jobs:
                 echo "image_name=${{ steps.extract-info.outputs.artifact-id }}" >> $GITHUB_ENV
             else
                 echo "image_name=${{ inputs.image_name }}" >> $GITHUB_ENV
-            fi
-            
-            echo "image_name=$(echo ${{ env.image_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+            fid
             
             if [ "${{ inputs.image_tag }}" = "" ]; then
                 echo "image_tag=${{ steps.extract-info.outputs.version }}" >> $GITHUB_ENV
@@ -91,12 +89,13 @@ jobs:
         with:
           images: ${{ env.registry}}/${{ env.image_name }}
 
-      - name: Make repository owner to lowercase
+      - name: convert values to lowercase
         id: lower-repo-owner
         run: |
           echo "githubowner=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_ENV
+          echo "image_name=$(echo ${{ env.image_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
-      - name: Build and push Docker image for API Gateway
+      - name: Build and push Docker image
         id: push-image
         uses: docker/build-push-action@v6.15.0
         with:
