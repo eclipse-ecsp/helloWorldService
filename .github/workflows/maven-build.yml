@@ -33,5 +33,4 @@ jobs:
     uses: ./.github/workflows/workflow-docker-push.yml
     with:
       maven_args: 'clean package --file pom.xml'
-    secrets:
-      token: ${{ secrets.DOCKER_API_TOKEN }}
+    secrets: inherit
