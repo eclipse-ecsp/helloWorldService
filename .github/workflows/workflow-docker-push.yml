@@ -71,11 +71,11 @@ jobs:
             else
                 echo "username=${{ inputs.username }}" >> $GITHUB_ENV
             fi
-            if [ -z "${{ inputs.token }}" ]; then
+            if [ -z "${{ secrets.token }}" ]; then
                 echo "token is not provided will be using the default token."
                 echo "token=${{ secrets.DOCKER_API_TOKEN }}" >> $GITHUB_ENV
             else
-                echo "token=${{ input.token }}" >> $GITHUB_ENV
+                echo "token=${{ secrets.token }}" >> $GITHUB_ENV
             fi
           fi
 
