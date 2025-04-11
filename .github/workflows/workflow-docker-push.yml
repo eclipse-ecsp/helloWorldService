@@ -75,7 +75,7 @@ jobs:
         id: set-image-name
         run: |
             if [ "${{ inputs.image_name }}" = "" ]; then
-                echo "image_name=${{ steps.extract-info.outputs.artifactId }}" >> $GITHUB_ENV
+                echo "image_name=${{ steps.extract-info.outputs.artifact-id }}" >> $GITHUB_ENV
             else
                 echo "image_name=${{ inputs.image_name }}" >> $GITHUB_ENV
             fi
