@@ -103,7 +103,10 @@ jobs:
         run: |
           echo "githubowner=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_ENV
           echo "image_name=$(echo ${{ env.image_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-          
+
+      - name: prepare full image tag
+        id: prepare-full-image-tag
+        run: |
           if [ "${{ inputs.registry }}" = "docker.io" ]; then
               echo "full_image_tag=${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
           else
