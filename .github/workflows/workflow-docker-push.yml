@@ -15,6 +15,7 @@ on:
         description: 'The container registry URL'
         required: false
         type: string
+        default: 'docker.io'
       maven_args:
         description: 'The Maven goals to execute'
         required: false
@@ -46,17 +47,6 @@ jobs:
           java-version: ${{ inputs.java_version }}
           distribution: zulu
           cache: maven
-
-      - name: validate inputs
-        id: validate-inputs
-        if: ${{ inputs.push == 'true' && inputs.registry == '' }}
-        run: |
-            if [ -z "${{ inputs.registry }}" ]; then
-                echo "Registry is not provided will be pushing to docker.io."
-                echo "registry=docker.io" >> $GITHUB_ENV
-            else
-                echo "registry=${{ inputs.registry }}" >> $GITHUB_ENV
-            fi
 
       - name: Maven Build
         id: maven_build
@@ -106,10 +96,10 @@ jobs:
       - name: prepare image tag
         id: prepare-image-tag
         run: |
-          if [ "${{ env.registry }}" == "docker.io" ]; then
+          if [ "${{ inputs.registry }}" == "docker.io" ]; then
             echo "full_image_tag=${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
           else
-            echo "full_image_tag=${{ env.registry }}/${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
+            echo "full_image_tag=${{ inputs.registry }}/${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
           fi
 
       - name: Build and push Docker image for API Gateway
