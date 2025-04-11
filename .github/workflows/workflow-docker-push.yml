@@ -97,19 +97,25 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_API_TOKEN }}
 
+      # Step to convert repository owner and image name to lowercase for consistency.
+      - name: prepare image name
+        id: lower-repo-owner
+        run: |
+          echo "githubowner=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_ENV
+          echo "image_name=$(echo ${{ env.image_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          
+          if [ "${{ inputs.registry }}" = "docker.io" ]; then
+              echo "full_image_tag=${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
+          else
+              echo "full_image_tag=${{ inputs.registry }}/${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
+          fi
+
       # Step to extract metadata (tags, labels) for the Docker image.
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5.7.0
         with:
-          images: ${{ env.registry}}/${{ env.image_name }}
-
-      # Step to convert repository owner and image name to lowercase for consistency.
-      - name: convert values to lowercase
-        id: lower-repo-owner
-        run: |
-          echo "githubowner=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_ENV
-          echo "image_name=$(echo ${{ env.image_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          images: ${{ env.full_image_tag }}
 
       # Step to build and optionally push the Docker image to the specified registry.
       - name: Build and push Docker image
@@ -119,7 +125,7 @@ jobs:
           context: ${{ inputs.context_path}}
           file: ${{ inputs.context_path}}/Dockerfile
           push: ${{ inputs.push}}
-          tags: ${{ inputs.registry }}/${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}
+          tags: ${{ env.full_image_tag }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             PROJECT_JAR_NAME=${{  steps.extract-info.outputs.artifact-id }}-${{ steps.extract-info.outputs.version }}
