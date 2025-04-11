@@ -45,13 +45,13 @@ jobs:
           fi
 
       - name: Configure Git
-        if: ${{ env.was_file_changed }} == 'true'
+        if: ${{ env.was_file_changed == 'true' }}
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Create pull request
-        if: ${{ env.was_file_changed }} == 'true'
+        if: ${{ env.was_file_changed == 'true' }}
         uses: peter-evans/create-pull-request@v6
         with:
           add-paths: |
