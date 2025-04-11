@@ -107,7 +107,7 @@ jobs:
             fi
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v4
+        uses: docker/login-action@v3.4.0
         with:
           registry: ${{ env.registry }}
           username: ${{ env.username }}
@@ -115,7 +115,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v5.5.1
+        uses: docker/metadata-action@v5.7.0
         with:
           images: ${{ env.registry}}/${{ env.image_name }}
 
@@ -126,7 +126,7 @@ jobs:
 
       - name: Build and push Docker image for API Gateway
         id: push-image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v6.15.0
         with:
           context: ${{ inputs.context_path}}
           file: ${{ inputs.context_path}}/Dockerfile
