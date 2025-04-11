@@ -70,7 +70,7 @@ jobs:
                 echo "image_name=${{ inputs.image_name }}" >> $GITHUB_ENV
             fi
             
-            echo "image_name=$(echo $image_name | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+            echo "image_name=$(echo ${{ env.image_name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
             
             if [ "${{ inputs.image_tag }}" = "" ]; then
                 echo "image_tag=${{ steps.extract-info.outputs.version }}" >> $GITHUB_ENV
@@ -95,7 +95,6 @@ jobs:
         id: lower-repo-owner
         run: |
           echo "githubowner=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_ENV
-
 
       - name: Build and push Docker image for API Gateway
         id: push-image
