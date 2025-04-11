@@ -16,7 +16,9 @@ permissions:
 
 jobs:
   check_licences:
-    uses: ./.github/workflows/licences-analysis.yml
+    uses: ./.github/workflows/workflow-licences-analysis.yml
     name: Analyse Licences
     with:
       create-review: false
+    secrets:
+      token: ${{ secrets.GITLAB_API_TOKEN }}

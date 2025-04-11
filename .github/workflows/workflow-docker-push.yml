@@ -1,0 +1,139 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        description: 'The name of the Docker image'
+        required: false
+        type: string
+      image_tag:
+        description: 'The tag for the Docker image'
+        required: false
+        type: string
+      registry:
+        description: 'The container registry URL'
+        required: false
+        type: string
+      username:
+        description: 'The username for the container registry'
+        required: false
+        type: string
+      maven_args:
+        description: 'The Maven goals to execute'
+        required: false
+        type: string
+        default: ''
+      context_path:
+        description: 'docker context path'
+        required: false
+        type: string
+        default: '.'
+      push:
+        description: 'Push the Docker image'
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      token:
+        required: false
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        if: ${{ env.sonar_enabled == 'true' }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ inputs.java_version }}
+          distribution: zulu
+          cache: maven
+
+      - name: validate inputs
+        id: validate-inputs
+        run: |
+          if [ "${{ inputs.push }}" = "true" ]; then
+            if [ -z "${{ inputs.registry }}" ]; then
+                echo "Registry is not provided will be pushing to docker.io."
+                echo "registry=docker.io" >> $GITHUB_ENV
+            else
+                echo "registry=${{ inputs.registry }}" >> $GITHUB_ENV
+            fi
+            
+            if [ -z "${{ inputs.username }}" ]; then
+                echo "username is not provided will be using the default name."
+                echo "username=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
+            else
+                echo "username=${{ inputs.username }}" >> $GITHUB_ENV
+            fi
+            if [ -z "${{ inputs.token }}" ]; then
+                echo "token is not provided will be using the default token."
+                echo "token=${{ secrets.DOCKER_API_TOKEN }}" >> $GITHUB_ENV
+            else
+                echo "token=${{ input.token }}" >> $GITHUB_ENV
+            fi
+          fi
+
+      - name: Maven Build
+        id: maven_build
+        if: ${{ inputs.maven_args != '' }}
+        run: |
+          mvn ${{ inputs.maven_args }}
+
+      - name: Extract api service pom details
+        id: extract-info
+        if: ${{ inputs.image_name != '' && inputs.image_tag != '' }}
+        uses: andreacomo/maven-gav-extractor@v2.0.1
+        with:
+          pom-location: ${{ inputs.context_path}}/pom.xml
+
+      - name: Set image name and tag
+        id: set-image-name
+        run: |
+            if [ "${{ inputs.image_name }}" = "" ]; then
+                echo "image_name=${{ steps.extract-info.outputs.artifactId }}" >> $GITHUB_ENV
+            else
+                echo "image_name=${{ inputs.image_name }}" >> $GITHUB_ENV
+            fi
+            if [ "${{ inputs.image_tag }}" = "" ]; then
+                echo "image_tag=${{ steps.extract-info.outputs.version }}" >> $GITHUB_ENV
+            else
+                echo "image_tag=${{ inputs.image_tag }}" >> $GITHUB_ENV
+            fi
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.registry }}
+          username: ${{ env.username }}
+          password: ${{ env.password }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5.5.1
+        with:
+          images: ${{ env.registry}}/${{ env.image_name }}
+
+      - name: Make repository owner to lowercase
+        id: lower-repo-owner
+        run: |
+          echo "githubowner=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_ENV
+
+      - name: Build and push Docker image for API Gateway
+        id: push-image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ inputs.context_path}}
+          file: ${{ inputs.context_path}}/Dockerfile
+          push: ${{ inputs.push}}
+          tags: ${{ env.registry }}/${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            PROJECT_JAR_NAME=${{ env.image_name}}-${{ env.image_tag }}
+            API_WAR_NAME=${{ env.image_name}}
+            PROJECT_JAR_VERSION=${{ env.image_tag }}

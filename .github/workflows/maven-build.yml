@@ -9,7 +9,7 @@ on:
 
 jobs:
   maven_build:
-    uses: ./.github/workflows/maven-run.yml
+    uses: ./.github/workflows/workflow-maven-run.yml
     name: Maven Build
     with:
       maven_args: 'clean package --file pom.xml'
@@ -17,14 +17,19 @@ jobs:
       token: ${{ secrets.GITHUB_TOKEN }}
   sonar_analysis:
     needs: maven_build
-    uses: ./.github/workflows/sonar-analysis.yml
+    uses: ./.github/workflows/workflow-sonar-analysis.yml
     secrets:
       token: ${{ secrets.SONAR_TOKEN }}
-  dependencies_analysis:
+  dependencies_update:
     needs: sonar_analysis
-    uses: ./.github/workflows/dependencies-analysis.yml
+    uses: ./.github/workflows/workflow-dependencies-update.yml
     permissions:
       pull-requests: write
       contents: read
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
+  docker_build:
+    needs: dependencies_update
+    uses: ./.github/workflows/workflow-docker-build.yml
+    secrets:
+      token: ${{ secrets.DOCKER_API_TOKEN }}
