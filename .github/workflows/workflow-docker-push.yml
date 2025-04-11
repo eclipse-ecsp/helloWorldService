@@ -31,6 +31,11 @@ on:
         required: false
         type: boolean
         default: true
+      java_version:
+        description: 'The Java version to use'
+        required: false
+        type: string
+        default: '17'
 
 jobs:
   build-and-push:
