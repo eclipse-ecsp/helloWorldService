@@ -20,3 +20,10 @@ jobs:
     uses: ./.github/workflows/sonar-analysis.yml
     secrets:
       token: ${{ secrets.SONAR_TOKEN }}
+  dependencies_analysis:
+    needs: sonar_analysis
+    uses: ./.github/workflows/dependencies-analysis.yml
+    permissions:
+      pull-requests: write
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
