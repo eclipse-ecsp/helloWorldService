@@ -103,7 +103,7 @@ jobs:
           context: ${{ inputs.context_path}}
           file: ${{ inputs.context_path}}/Dockerfile
           push: ${{ inputs.push}}
-          tags: ${{ inputs.registry }}/${{ env.githubowner }}/{{ env.image_name}}:${{ env.image_tag }}
+          tags: ${{ inputs.registry }}/${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             PROJECT_JAR_NAME=${{ env.image_name}}-${{ env.image_tag }}
