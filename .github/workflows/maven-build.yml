@@ -20,14 +20,14 @@ jobs:
     uses: ./.github/workflows/workflow-sonar-analysis.yml
     secrets:
       token: ${{ secrets.SONAR_TOKEN }}
-#  dependencies_update:
-#    needs: sonar_analysis
-#    uses: ./.github/workflows/workflow-dependencies-update.yml
-#    permissions:
-#      pull-requests: write
-#      contents: read
-#    secrets:
-#      token: ${{ secrets.GITHUB_TOKEN }}
+  dependencies_update:
+    needs: sonar_analysis
+    uses: ./.github/workflows/workflow-dependencies-update.yml
+    permissions:
+      pull-requests: write
+      contents: read
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
   docker_push:
     needs: sonar_analysis
     uses: ./.github/workflows/workflow-docker-push.yml
