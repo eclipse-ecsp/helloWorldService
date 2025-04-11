@@ -103,6 +103,15 @@ jobs:
         run: |
           echo "githubowner=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_ENV
 
+      - name: prepare image tag
+        id: prepare-image-tag
+        run: |
+          if [ "${{ env.registry }}" == "docker.io" ]; then
+            echo "full_image_tag=${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
+          else
+            echo "full_image_tag=${{ env.registry }}/${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}" >> $GITHUB_ENV
+          fi
+
       - name: Build and push Docker image for API Gateway
         id: push-image
         uses: docker/build-push-action@v6.15.0
@@ -110,7 +119,7 @@ jobs:
           context: ${{ inputs.context_path}}
           file: ${{ inputs.context_path}}/Dockerfile
           push: ${{ inputs.push}}
-          tags: ${{ env.registry }}/${{ env.githubowner }}/${{ env.image_name}}:${{ env.image_tag }}
+          tags: ${{ env.full_image_tag }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             PROJECT_JAR_NAME=${{ env.image_name}}-${{ env.image_tag }}
