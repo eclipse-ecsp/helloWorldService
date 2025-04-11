@@ -84,4 +84,4 @@ jobs:
           mvn clean verify sonar:sonar \
             -Dsonar.projectKey=${{ env.sonar_project_key }} \
             -Dsonar.organization=${{ env.sonar_organization }} \
-            -Dsonar.login=${{ env.SONAR_TOKEN }}
+            -Dsonar.login=${{ env.token }}
