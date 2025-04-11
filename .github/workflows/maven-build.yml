@@ -25,5 +25,6 @@ jobs:
     uses: ./.github/workflows/dependencies-analysis.yml
     permissions:
       pull-requests: write
+      contents: read
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
