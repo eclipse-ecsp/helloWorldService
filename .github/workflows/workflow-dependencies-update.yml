@@ -14,7 +14,7 @@ on:
         required: true
 
 jobs:
-  build:
+  analyse_and_update:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
