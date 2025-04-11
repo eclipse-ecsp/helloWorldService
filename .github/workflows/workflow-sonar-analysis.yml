@@ -82,6 +82,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.token }}
         run: |
           mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=${{ env.sonar_project_key }} \
+            -Dsonar.projectKey=${{ env.sonar_key }} \
             -Dsonar.organization=${{ env.sonar_organization }} \
-            -Dsonar.login=${{ env.token }}
+            -Dsonar.login=${{ secrets.token }}
