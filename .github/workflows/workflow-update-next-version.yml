@@ -44,6 +44,7 @@ jobs:
             **/pom.xml
           token: ${{ secrets.ECSP_BOT_PAT }}
           branch: chore/update-next-version
+          base: main
           commit-message: "chore(version): Update version"
           delete-branch: true
           title: Update next version

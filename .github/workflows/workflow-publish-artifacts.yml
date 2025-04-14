@@ -53,10 +53,11 @@ jobs:
           distribution: 'zulu'
           cache: maven
 
-      - uses: ./.github/actions/import-gpg-key/action.yml
+      - uses: ./.github/actions/import-gpg-key
         name: "Import GPG Key"
         with:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+
 
       - name: Configure Maven settings
         run: |
