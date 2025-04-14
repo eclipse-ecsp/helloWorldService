@@ -56,7 +56,7 @@ jobs:
         with:
           add-paths: |
             DEPENDENCIES
-          token: ${{ inputs.token }}
+          token: ${{ secrets.token }}
           branch: chore/update-DEPENDENCIES
           commit-message: "chore(dependencies): Update DEPENDENCIES"
           delete-branch: true
