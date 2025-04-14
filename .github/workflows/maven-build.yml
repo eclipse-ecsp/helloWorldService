@@ -9,7 +9,7 @@ on:
 
 jobs:
   maven_build:
-    uses: ./.github/workflows/workflow-maven-run.yml
+    uses: eclipse-ecsp/.github/workflows/workflow-maven-run.yml@main
     name: Maven Build
     with:
       maven_args: 'clean package --file pom.xml'
@@ -17,12 +17,12 @@ jobs:
       token: ${{ secrets.GITHUB_TOKEN }}
   sonar_analysis:
     needs: maven_build
-    uses: ./.github/workflows/workflow-sonar-analysis.yml
+    uses: eclipse-ecsp/.github/workflows/workflow-sonar-analysis.yml@main
     secrets:
       token: ${{ secrets.SONAR_TOKEN }}
   dependencies_update:
     needs: sonar_analysis
-    uses: ./.github/workflows/workflow-dependencies-update.yml
+    uses: eclipse-ecsp/.github/workflows/workflow-dependencies-update.yml@main
     secrets: inherit
     permissions:
       pull-requests: write
@@ -30,7 +30,7 @@ jobs:
 
   docker_push:
     needs: sonar_analysis
-    uses: ./.github/workflows/workflow-docker-push.yml
+    uses: eclipse-ecsp/.github/workflows/workflow-docker-push.yml@main
     secrets: inherit
     with:
       #image_tag: '0.0.1'

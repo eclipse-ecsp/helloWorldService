@@ -6,13 +6,13 @@ on:
 
 jobs:
   sonar_analysis:
-    uses: ./.github/workflows/workflow-sonar-analysis.yml
+    uses: eclipse-ecsp/.github/workflows/workflow-sonar-analysis.yml@main
     secrets:
       token: ${{ secrets.SONAR_TOKEN }}
 
   licence_compliance_status:
     needs: sonar_analysis
-    uses: ./.github/workflows/workflow-licences-analysis.yml
+    uses: eclipse-ecsp/.github/workflows/workflow-licences-analysis.yml@main
     name: Check Licence Compliance Status
     with:
       create-review: false
@@ -43,14 +43,14 @@ jobs:
 
   publish_artificats:
     needs: extract_version
-    uses: ./.github/workflows/workflow-publish-artifacts.yml
+    uses: eclipse-ecsp/.github/workflows/workflow-publish-artifacts.yml@main
     secrets: inherit
     with:
       release_version: ${{ needs.extract_version.outputs.release_version }}
 
   docker_push:
     needs: extract_version
-    uses: ./.github/workflows/workflow-docker-push.yml
+    uses: eclipse-ecsp/.github/workflows/workflow-docker-push.yml@main
     secrets: inherit
     with:
       image_tag: ${{ needs.extract_version.outputs.release_version }}
