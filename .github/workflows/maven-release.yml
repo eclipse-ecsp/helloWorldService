@@ -3,11 +3,6 @@ name: Release
 on:
   release:
     types: [created]
-  workflow_dispatch:
-    inputs:
-        release_version:
-            description: 'Release version to use'
-            required: true
 
 jobs:
   sonar_analysis:
@@ -18,7 +13,7 @@ jobs:
 
   licence_compliance_status:
     needs: sonar_analysis
-    uses: ./.github/workflows/licence-compliance.yaml
+    uses: ./.github/workflows/workflow-licences-analysis.yml
     name: Check Licence Compliance Status
 
   extract_version:
@@ -50,9 +45,9 @@ jobs:
     secrets: inherit
     with:
       image_tag: ${{ env.release_version }}
-      maven_args: 'clean package --file pom.xml -P release'
+      maven_args: 'clean package -P release'
 
-  update_next_update:
+  update_next_version:
     needs: docker_push
     uses: ./.github/workflows/workflow-update-next-version.yml
     secrets: inherit
