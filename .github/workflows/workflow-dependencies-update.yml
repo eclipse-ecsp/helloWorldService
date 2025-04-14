@@ -36,7 +36,7 @@ jobs:
 
       - name: Check if file was changed
         run: |
-          if git diff --name-only ${{ github.base_ref }}...${{ github.sha }} | grep -e 'DEPENDENCIES'; then
+          if git diff --name-only HEAD~1 | grep -e 'DEPENDENCIES'; then
             echo "The file was changed"
             echo "was_file_changed=true" >> "$GITHUB_ENV"
           else
