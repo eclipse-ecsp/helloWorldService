@@ -1,4 +1,4 @@
-name: Run Maven
+name: Publish Artifacts
 
 on:
   workflow_call:
