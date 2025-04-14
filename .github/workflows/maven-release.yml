@@ -1,0 +1,61 @@
+name: Maven Build & Sonar Analysis
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+        release_version:
+            description: 'Release version to use'
+            required: true
+
+jobs:
+  sonar_analysis:
+    needs: maven_build
+    uses: ./.github/workflows/workflow-sonar-analysis.yml
+    secrets:
+      token: ${{ secrets.SONAR_TOKEN }}
+
+  licence_compliance_status:
+    needs: sonar_analysis
+    uses: ./.github/workflows/licence-compliance.yaml
+    name: Check Licence Compliance Status
+
+  extract_version:
+    runs-on: ubuntu-latest
+    needs: licence_compliance_status
+    name: Extract release version without v prefix
+    steps:
+    - run: |
+        if [[ "${{ github.event_name }}" == "release" ]]; then
+            if [[ "${{ github.event.release.tag_name }}" == v* ]]; then
+                echo "release_version=${{ github.event.release.tag_name:1 }}" >> $GITHUB_ENV
+            else
+                echo "release_version=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+            fi
+        else
+          echo "release_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+        fi
+
+  publish_artificats:
+    needs: licence_compliance_status
+    uses: ./.github/workflows/workflow-publish-artifacts.yml
+    secrets: inherit
+    with:
+      release_version: ${{ env.release_version }}
+
+  docker_push:
+    needs: licence_compliance_status
+    uses: ./.github/workflows/workflow-docker-push.yml
+    secrets: inherit
+    with:
+      image_tag: ${{ env.release_version }}
+      maven_args: 'clean package --file pom.xml -P release'
+
+  update_next_update:
+    needs: docker_push
+    uses: ./.github/workflows/workflow-update-next-version.yml
+    secrets: inherit
+    with:
+      version: ${{ env.release_version }}
+
