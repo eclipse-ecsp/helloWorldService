@@ -88,6 +88,11 @@ jobs:
             echo "RELEASE_VERSION=${{ inputs.release_version }}" >> $GITHUB_ENV
           fi
 
+      - name: set the version to the release
+        run: |
+          mvn versions:set -DnewVersion=${{ env.RELEASE_VERSION }} -DgenerateBackupPoms=false
+          mvn versions:commit
+
       - name: Publish version
         run: |-
            mvn clean deploy -s $HOME/.m2/settings.xml -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}" -Prelease -Drevision=${{ env.RELEASE_VERSION }}
