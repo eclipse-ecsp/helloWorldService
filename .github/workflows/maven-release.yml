@@ -34,7 +34,7 @@ jobs:
                 echo "release_version=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
             fi
         else
-          echo "release_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo "release_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed 's/-SNAPSHOT//' )" >> $GITHUB_ENV
         fi
 
   publish_artificats:
