@@ -29,8 +29,9 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "release" ]]; then
               if [[ "${{ github.event.release.tag_name }}" == v* ]]; then
-                  echo "release_version=${{ github.event.release.tag_name:1 }}" >> $GITHUB_ENV
-                  echo "::set-output name=release_version::${{ github.event.release.tag_name:1 }}"
+                  version=${{ github.event.release.tag_name }}
+                  echo "release_version=${version:1}" >> $GITHUB_ENV
+                  echo "::set-output name=release_version::${version:1}"
               else
                   echo "release_version=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
                   echo "::set-output name=release_version::${{ github.event.release.tag_name }}"
