@@ -35,14 +35,14 @@ jobs:
         fi
 
   publish_artificats:
-    needs: licence_compliance_status
+    needs: extract_version
     uses: ./.github/workflows/workflow-publish-artifacts.yml
     secrets: inherit
     with:
       release_version: ${{ env.release_version }}
 
   docker_push:
-    needs: licence_compliance_status
+    needs: extract_version
     uses: ./.github/workflows/workflow-docker-push.yml
     secrets: inherit
     with:
@@ -50,7 +50,7 @@ jobs:
       maven_args: 'clean package -P release'
 
   update_next_version:
-    needs: docker_push
+    needs: extract_version
     uses: ./.github/workflows/workflow-update-next-version.yml
     secrets: inherit
     with:
