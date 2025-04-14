@@ -51,7 +51,7 @@ jobs:
           distribution: 'zulu'
           settings-path: ${{ github.workspace }}
 
-      - uses: ./.github/workflows/workflow-import-gpg-key.yml
+      - uses: ./.github/actions/import-gpg-key/action.yml
         name: "Import GPG Key"
         with:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
