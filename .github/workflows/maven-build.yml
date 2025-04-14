@@ -32,6 +32,6 @@ jobs:
     needs: sonar_analysis
     uses: ./.github/workflows/workflow-docker-push.yml
     with:
-      image_tag: '0.0.1'
+      #image_tag: '0.0.1'
       maven_args: 'clean package --file pom.xml'
     secrets: inherit
