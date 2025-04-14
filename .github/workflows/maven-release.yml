@@ -55,11 +55,3 @@ jobs:
     with:
       image_tag: ${{ needs.extract_version.outputs.release_version }}
       maven_args: 'clean package -P release'
-
-  update_next_version:
-    needs: extract_version
-    uses: ./.github/workflows/workflow-update-next-version.yml
-    secrets: inherit
-    with:
-      version: ${{ needs.extract_version.outputs.release_version }}
-
