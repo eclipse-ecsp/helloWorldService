@@ -23,15 +23,15 @@ jobs:
   dependencies_update:
     needs: sonar_analysis
     uses: ./.github/workflows/workflow-dependencies-update.yml
+    secrets: inherit
     permissions:
       pull-requests: write
       contents: read
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+
   docker_push:
     needs: sonar_analysis
     uses: ./.github/workflows/workflow-docker-push.yml
+    secrets: inherit
     with:
       #image_tag: '0.0.1'
       maven_args: 'clean package --file pom.xml'
-    secrets: inherit
