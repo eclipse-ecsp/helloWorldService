@@ -85,7 +85,7 @@ jobs:
           if [ "${{ inputs.release_version }}" = "" ]; then
             echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
           else
-            echo "RELEASE_VERSION="${{ inputs.release_version}}">> $GITHUB_ENV
+            echo "RELEASE_VERSION=${{ inputs.release_version }}" >> $GITHUB_ENV
           fi
 
       - name: Publish version
