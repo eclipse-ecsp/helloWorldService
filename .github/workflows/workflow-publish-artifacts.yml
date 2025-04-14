@@ -43,13 +43,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: ${{ inputs.java_version }}
           distribution: 'zulu'
-          settings-path: ${{ github.workspace }}
+          cache: maven
 
       - uses: ./.github/actions/import-gpg-key/action.yml
         name: "Import GPG Key"

@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -35,7 +37,15 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: update next version
-        run: |
-          git commit -am "chore(release): update to version ${{ inputs.version }}"
-          git push origin ${{ github.ref }}
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          add-paths: |
+            **/pom.xml
+          token: ${{ secrets.ECSP_BOT_PAT }}
+          branch: chore/update-next-version
+          commit-message: "chore(version): Update version"
+          delete-branch: true
+          title: Update next version
+          body: |
+            This PR updates the next version
