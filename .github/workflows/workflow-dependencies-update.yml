@@ -8,10 +8,6 @@ on:
         required: false
         type: string
         default: "17"
-    secrets:
-      token:
-        description: "The GitHub token for creating pull requests"
-        required: true
 
 jobs:
   analyse_and_update:
