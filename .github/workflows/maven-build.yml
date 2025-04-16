@@ -30,6 +30,7 @@ jobs:
 
   docker_push:
     needs: sonar_analysis
+    if: github.ref_name == 'main'
     uses: eclipse-ecsp/.github/.github/workflows/workflow-docker-push.yml@main
     secrets: inherit
     with:

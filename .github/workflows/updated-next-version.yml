@@ -1,0 +1,16 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+
+jobs:
+  update_next_version:
+    needs: publish_artifacts
+    uses: ./.github/workflows/workflow-update-next-version.yml
+    with:
+      version: ${{ needs.extract_version.outputs.release_version }}
+
