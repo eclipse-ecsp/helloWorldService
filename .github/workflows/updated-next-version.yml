@@ -12,4 +12,5 @@ jobs:
     uses: ./.github/workflows/workflow-update-next-version.yml
     with:
       version: ${{ inputs.version}}
+    secrets: inherit
 
