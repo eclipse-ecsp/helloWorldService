@@ -39,6 +39,7 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Create pull request
+        id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.ECSP_BOT_PAT }}
@@ -48,3 +49,8 @@ jobs:
           title: Update next version
           body: |
             This PR updates the next version
+      - name: Check Create PR output
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+            echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+            echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
