@@ -1,11 +1,8 @@
 name: Update Version
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release version'
-        required: true
+  release:
+    types: [created]
 
 jobs:
   update_next_version:
