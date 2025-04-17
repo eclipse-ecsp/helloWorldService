@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.eclipse.ecsp</groupId>
 	<artifactId>helloWorldService</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>-SNAPSHOT</version>
 	<name>helloWorldService</name>
 	<description>helloWorldService application for CI</description>
 	<url/>
