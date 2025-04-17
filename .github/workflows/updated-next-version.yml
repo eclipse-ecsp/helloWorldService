@@ -6,7 +6,7 @@ on:
 
 jobs:
   update_next_version:
-    uses: ./.github/workflows/workflow-update-next-version.yml
+    uses: eclipse-ecsp/.github/.github/workflows/workflow-update-next-version.yml@docker-push
     with:
       version: ${{ inputs.version}}
     secrets: inherit

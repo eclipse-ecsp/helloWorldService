@@ -50,15 +50,8 @@ jobs:
 
   docker_push:
     needs: extract_version
-    uses: eclipse-ecsp/.github/.github/workflows/workflow-docker-push.yml@main
+    uses: eclipse-ecsp/.github/.github/workflows/workflow-docker-push.yml@docker-push
     secrets: inherit
     with:
       image_tag: ${{ needs.extract_version.outputs.release_version }}
       maven_args: 'clean package -P release'
-
-  update_next_version:
-    needs: publish_artifacts
-    uses: ./.github/workflows/workflow-update-next-version.yml
-    with:
-      version: ${{ needs.extract_version.outputs.release_version }}
-    secrets: inherit
