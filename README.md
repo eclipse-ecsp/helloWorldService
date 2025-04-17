@@ -1,5 +1,5 @@
 # helloWorldService
-ECSP service for CICD integration test
+ECSP service for CI-CD integration test with github workflow
 
 [![Build](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/maven-build.yml/badge.svg)](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/maven-build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=eclipse-ecsp_helloWorldService&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=eclipse-ecsp_helloWorldService)
