@@ -1,4 +1,6 @@
-[<img src="./images/logo.png" width="300" height="150"/>](logo.png)
+<div align="center">
+  <img src="./images/logo.png" width="300" height="150"/>
+</div>
 
 # helloWorldService
 [![Build](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/maven-build.yml/badge.svg)](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/maven-build.yml)
