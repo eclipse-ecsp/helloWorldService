@@ -1,11 +1,16 @@
-# helloWorldService
+[<img src="./images/logo.png" width="300" height="150"/>](logo.png)
 
-ECSP service for CICD integration test
+# helloWorldService
+helloWorldService is a sample ECSP service designed for CI/CD integration testing. It demonstrates automated build, test, license compliance, and release workflows using GitHub Actions. The project is built with Java and Maven, and includes Docker support for containerized deployments.
+
+[![Build](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/maven-build.yml/badge.svg)](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/maven-build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=eclipse-ecsp_helloWorldService&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=eclipse-ecsp_helloWorldService)
+[![License Compliance](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/licence-compliance.yaml/badge.svg)](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/licence-compliance.yaml)
+[![Latest Release](https://img.shields.io/github/v/release/eclipse-ecsp/helloWorldService?sort=semver)](https://github.com/eclipse-ecsp/helloWorldService/releases)
 
 ---
 
 ## Table of Contents
-- [Introduction](#introduction)
 - [GitHub Actions Workflows](#github-actions-workflows)
 - [Support](#support)
 - [Security Contact Information](#security-contact-information)
@@ -15,16 +20,6 @@ ECSP service for CICD integration test
 - [Authors](#authors)
 - [Troubleshooting](#troubleshooting)
 - [Announcements](#announcements)
-
----
-
-## Introduction
-helloWorldService is a sample ECSP service designed for CI/CD integration testing. It demonstrates automated build, test, license compliance, and release workflows using GitHub Actions. The project is built with Java and Maven, and includes Docker support for containerized deployments.
-
-[![Build](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/maven-build.yml/badge.svg)](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/maven-build.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=eclipse-ecsp_helloWorldService&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=eclipse-ecsp_helloWorldService)
-[![License Compliance](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/licence-compliance.yaml/badge.svg)](https://github.com/eclipse-ecsp/helloWorldService/actions/workflows/licence-compliance.yaml)
-[![Latest Release](https://img.shields.io/github/v/release/eclipse-ecsp/helloWorldService?sort=semver)](https://github.com/eclipse-ecsp/helloWorldService/releases)
 
 ---
 

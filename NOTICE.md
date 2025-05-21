@@ -26,7 +26,7 @@ SPDX-License-Identifier: Apache-2.0
 
 The project maintains the following source code repositories:
 
-https://github.com/eclipse-ecsp/services-dependencies
+https://github.com/eclipse-ecsp/helloWorldService
 
 ## Third-party Content
 
