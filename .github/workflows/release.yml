@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-test:
+    uses: eclipse-ecsp/.github/.github/workflows/workflow-nodejs-build.yml@nodejs
+    with:
+      node-version: '20'
+
+  license-check:
+    uses: eclipse-ecsp/.github/.github/workflows/workflow-nodejs-licence-analysis.yml@nodejs
+    needs: build-and-test
+    with:
+      node-version: '20'
+      java-version: '17'
+      create-review: false
+
+  docker-push:
+    needs: [build-and-test, license-check]
+    uses: eclipse-ecsp/.github/.github/workflows/workflow-nodejs-docker-push.yml@nodejs
+    with:
+      registry: 'docker.io'
+      image-name: 'hello-world-service'
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_API_TOKEN: ${{ secrets.DOCKER_API_TOKEN }}

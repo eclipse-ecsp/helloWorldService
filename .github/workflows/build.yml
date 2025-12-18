@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches: [ "ci-workflow", "main" ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    uses: eclipse-ecsp/.github/.github/workflows/workflow-nodejs-build.yml@nodejs
+    with:
+      node-version: '20'
+      sonar-analysis: true
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  docker-push:
+    needs: [build-and-test]
+    uses: eclipse-ecsp/.github/.github/workflows/workflow-nodejs-docker-push.yml@nodejs
+    if: false # Disable docker push on normal builds
+    with:
+      registry: "docker.io"
+      image-name: "hello-world-service"
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_API_TOKEN: ${{ secrets.DOCKER_API_TOKEN }}

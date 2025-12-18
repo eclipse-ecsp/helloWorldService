@@ -1,0 +1,37 @@
+{
+  "name": "uidam-portal",
+  "version": "0.0.1",
+  "description": "Administering the UIDAM system, enabling management of users, accounts, roles, scopes configurations.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "start": "node dist/index.js",
+    "license:check": "dash-licenses-wrapper --inputFile=package-lock.json --summary=DEPENDENCIES",
+    "license:check:review": "dash-licenses-wrapper --inputFile=package-lock.json --review --project=automotive.ecsp --summary=DEPENDENCIES"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-ecsp/uidam-portal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/eclipse-ecsp/uidam-portal/issues"
+  },
+  "homepage": "https://github.com/eclipse-ecsp/uidam-portal#readme",
+  "devDependencies": {
+    "@eclipse-dash/nodejs-wrapper": "^0.0.1",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.3",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

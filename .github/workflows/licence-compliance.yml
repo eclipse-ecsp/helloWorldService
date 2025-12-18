@@ -1,0 +1,16 @@
+name: License Compliance
+
+on:
+  push:
+    branches: [ "ci-workflow", "main" ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  license-check:
+    uses: eclipse-ecsp/.github/.github/workflows/workflow-nodejs-licence-analysis.yml@nodejs
+    with:
+      node-version: '20'
+      java-version: '17'
+      create-review: true
