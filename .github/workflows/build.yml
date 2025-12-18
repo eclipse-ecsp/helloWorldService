@@ -25,7 +25,7 @@ jobs:
   docker-push:
     needs: [build-and-test, extract-version]
     uses: eclipse-ecsp/.github/.github/workflows/workflow-nodejs-docker-push.yml@nodejs
-    if: true # Disable docker push on normal builds
+    if: true #Disable docker push on normal builds
     with:
       registry: "docker.io"
       image-name: "hello-world-service"
