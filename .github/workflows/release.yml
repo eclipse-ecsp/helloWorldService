@@ -21,6 +21,28 @@ jobs:
       node-version: '20'
       java-version: '17'
       create-review: false
+  
+  extract-version:
+    runs-on: ubuntu-latest
+    needs: license-check
+    name: Extract release version without v prefix
+    outputs:
+      release_version: ${{ steps.set_version.outputs.release_version }}
+    steps:
+      - id: set_version
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+              if [[ "${{ github.event.release.tag_name }}" == v* ]]; then
+                  version=${{ github.event.release.tag_name }}
+                  echo "release_version=${version:1}" >> $GITHUB_ENV
+                  echo "::set-output name=release_version::${version:1}"
+              else
+                  echo "release_version=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+                  echo "::set-output name=release_version::${{ github.event.release.tag_name }}"
+              fi
+          else
+            
+          fi
 
   docker-push:
     needs: [build-and-test, license-check]
@@ -28,6 +50,7 @@ jobs:
     with:
       registry: 'docker.io'
       image-name: 'hello-world-service'
+      image-version: ${{ needs.extract-version.outputs.release_version }}
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_API_TOKEN: ${{ secrets.DOCKER_API_TOKEN }}
