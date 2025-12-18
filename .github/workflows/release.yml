@@ -41,16 +41,18 @@ jobs:
                   echo "::set-output name=release_version::${{ github.event.release.tag_name }}"
               fi
           else
-            
+             version=$(node -p "require('./package.json').version")
+            echo "release_version=${version}" >> $GITHUB_ENV
+            echo "::set-output name=release_version::${version}" 
           fi
 
   docker-push:
-    needs: [build-and-test, license-check]
+    needs: [build-and-test, license-check, extract-version]
     uses: eclipse-ecsp/.github/.github/workflows/workflow-nodejs-docker-push.yml@nodejs
     with:
       registry: 'docker.io'
       image-name: 'hello-world-service'
-      image-version: ${{ needs.extract-version.outputs.release_version }}
+      image-tag: ${{ needs.extract-version.outputs.release_version }}
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_API_TOKEN: ${{ secrets.DOCKER_API_TOKEN }}
